@@ -7,7 +7,7 @@ app.directive('mergelyEditor', function() {
     template: '<div id="mergely-editor"></div>',
     scope: {
       files: '=',
-      mergeFiles: '='
+      mergeFiles: '=',
       complete: '='
     },
     link: function($scope, element) {
@@ -23,7 +23,7 @@ app.directive('mergelyEditor', function() {
       // This function is called once per file
       var file_index = 0;
       var nextFile = function() {
-        var lcontent = $scopes.files{
+        var lcontent = $scopes.files;
         file_index++;
       }
 
