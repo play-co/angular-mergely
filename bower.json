@@ -1,0 +1,20 @@
+{
+  "name": "angular-mergely",
+  "version": "0.1.0",
+  "authors": [
+    "Chris Harding <chris@weeby.co>"
+  ],
+  "description": "An angular wrapper for mergely",
+  "main": "merge.js",
+  "keywords": [
+    "angular",
+    "mergely",
+    "merge",
+    "diff"
+  ],
+  "license": "MPL",
+  "private": true,
+  "dependencies": {
+    "mergely": "git@github.com:weebygames/bower-mergely#master"
+  }
+}
