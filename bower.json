@@ -15,6 +15,7 @@
   "license": "MPL",
   "private": true,
   "dependencies": {
-    "mergely": "git@github.com:weebygames/bower-mergely#master"
+    "mergely": "git@github.com:weebygames/bower-mergely#master",
+    "angular-bootstrap": "~0.12.1"
   }
 }

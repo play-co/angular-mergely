@@ -4,39 +4,71 @@ app.directive('mergelyEditor', function() {
   return {
     restrict: 'E',
     replace: true,
-    template: '<div id="mergely-editor"></div>',
+    template:
+      '<div class="mergely-wrapper">' +
+        '<tabset>' +
+          '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
+        '</tabset>' +
+        '<div id="mergely-editor"></div>' +
+      '</div>',
     scope: {
       files: '=',
       mergeFiles: '=',
       complete: '='
     },
+    controller: function($scope) {
+      $scope.tabs = [];
+    },
     link: function($scope, element) {
       var file = undefined;
 
-      var setFiles = function(files, set) {
-        if (Object.keys(files).length) {
-          if (file === undefined) {
-            file = Object.keys(files)[0];
-          }
+      var merge = function(as, bs) {
+        var cs = [];
+        for (var a in as) cs[a] = as[a];
+        for (var b in bs) cs[b] = bs[b];
+        return cs;
+      }
+
+      var openTab = function(file) {
+        $('#mergely-editor').mergely('lhs', $scope.files[file] || '');
+        $('#mergely-editor').mergely('rhs', $scope.mergeFiles[file] || '');
+      };
+
+      var updateTabs = function() {
+        // make sure we have some file active
+        if (file === undefined) {
+          file = Object.keys($scope.mergeFiles)[0] || file;
+          file = Object.keys($scope.files)[0] || file;
         }
 
-        var content = '';
-        if (file in files) {
-          content = '' + files[file];
+        // update the tabs
+        $scope.tabs = [];
+        var paths = merge(Object.keys($scope.files), Object.keys($scope.mergeFiles));
+
+        for (var i = 0; i < paths.length; i++) {
+          var path = paths[i];
+          $scope.tabs.push({
+            heading: path,
+            active: path === file,
+            click: function(p) {
+              openTab(p);
+            }
+          });
         }
 
-        $('#mergely-editor').mergely(set, content);
+        // make sure to goto the tab
+        openTab(file);
       };
 
       $scope.$watch('files', function(files) {
         if (files) {
-          setFiles(files, 'lhs');
+          updateTabs();
         }
       });
 
       $scope.$watch('mergeFiles', function(mergeFiles) {
         if (mergeFiles) {
-          setFiles(mergeFiles, 'rhs');
+          updateTabs();
         }
       });
 
