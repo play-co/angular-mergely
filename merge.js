@@ -11,42 +11,48 @@ app.directive('mergelyEditor', function() {
       complete: '='
     },
     link: function($scope, element) {
-      $scope.lset = null;
-      $scope.rset = null;
+      var file = undefined;
 
-      // Make list of filenames
-      var filenames = Object.keys($scope.files);
-      for (var f in $scope.mergeFiles) {
-        filenames.push(f);
-      }
+      var setFiles = function(files, set) {
+        if (Object.keys(files).length) {
+          if (file === undefined) {
+            file = Object.keys(files)[0];
+          }
+        }
 
-      // This function is called once per file
-      var file_index = 0;
-      var nextFile = function() {
-        var lcontent = $scopes.files;
-        file_index++;
-      }
+        var content = '';
+        if (file in files) {
+          content = '' + files[file];
+        }
 
-      // We need to wait until lset and rset have been set
-      var set_sets = 0;
-      var set_set = function() {
-        set_sets++;
-        if (set_sets == 2) {
-          // lset and rset set
-          nextFile();
+        console.log('setting ', file, content);
+        $('#mergely-editor').mergely(set, content);
+
+        if ($scope.files && $scope.mergeFiles) {
+          for (var k in $scope.files) {
+            if ($scope.files[k] !== $scope.mergeFiles) {
+              console.log(k, 'versions differ');
+            } else {
+              console.log(k, 'versions same');
+            }
+          }
         }
       };
 
+      $scope.$watch('files', function(files) {
+        if (files) {
+          setFiles(files, 'lhs');
+        }
+      });
+
+      $scope.$watch('mergeFiles', function(files) {
+        if (files) {
+          setFiles(files, 'rhs');
+        }
+      });
+
       $('#mergely-editor').mergely({
         cmsettings: { readOnly: false, lineNumbers: true },
-        lhs: function(setValue) {
-          $scope.lset = setValue;
-          set_set();
-        },
-        rhs: function(setValue) {
-          $scope.rset = setValue;
-          set_set();
-        }
       });
     }
   }
