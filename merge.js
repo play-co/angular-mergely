@@ -25,18 +25,7 @@ app.directive('mergelyEditor', function() {
           content = '' + files[file];
         }
 
-        console.log('setting ', file, content);
         $('#mergely-editor').mergely(set, content);
-
-        if ($scope.files && $scope.mergeFiles) {
-          for (var k in $scope.files) {
-            if ($scope.files[k] !== $scope.mergeFiles) {
-              console.log(k, 'versions differ');
-            } else {
-              console.log(k, 'versions same');
-            }
-          }
-        }
       };
 
       $scope.$watch('files', function(files) {
@@ -45,9 +34,9 @@ app.directive('mergelyEditor', function() {
         }
       });
 
-      $scope.$watch('mergeFiles', function(files) {
-        if (files) {
-          setFiles(files, 'rhs');
+      $scope.$watch('mergeFiles', function(mergeFiles) {
+        if (mergeFiles) {
+          setFiles(mergeFiles, 'rhs');
         }
       });
 
