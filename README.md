@@ -22,3 +22,12 @@ The following attributes can be set on the `mergelyEditor` directive:
   * `cancel()`
     A function to be called upon the cancelation of the merge.
 
+The following css classes are of importance (in addition to those provided by
+mergely itself):
+
+  * `merge-bar`
+    The bar above the mergely editor.
+  * `merge-btn`
+    Applied to the "Merge" and "Cancel" button elements.
+  * `merge-btn-container`
+    A container encapsulating the aforementioned buttons.
