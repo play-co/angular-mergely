@@ -5,7 +5,7 @@
     "Chris Harding <chris@weeby.co>"
   ],
   "description": "An angular wrapper for mergely",
-  "main": "merge.js",
+  "main": [ "merge.js", "merge.css" ],
   "keywords": [
     "angular",
     "mergely",
