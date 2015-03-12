@@ -69,7 +69,11 @@ app.directive('mergelyEditor', function() {
         $('#mergely-editor').mergely('rhs', rcontent);
       };
 
-      var updateTabs = function() {
+      var updateTabs = function(files) {
+        if (!files) {
+          return;
+        }
+
         // make sure we have some file active
         if (file === undefined) {
           file = Object.keys($scope.mergeFiles)[0] || file;
@@ -85,9 +89,7 @@ app.directive('mergelyEditor', function() {
           $scope.tabs.push({
             heading: path,
             active: path === file,
-            click: function(p) {
-              openTab(p);
-            }
+            click: openTab
           });
         }
 
@@ -95,18 +97,11 @@ app.directive('mergelyEditor', function() {
         openTab(file);
       };
 
-      $scope.$watch('files', function(files) {
-        if (files) {
-          updateTabs();
-        }
-      });
+      // update tabs when files/mergeFiles change
+      $scope.$watch('files', updateTabs);
+      $scope.$watch('mergeFiles', updateTabs);
 
-      $scope.$watch('mergeFiles', function(mergeFiles) {
-        if (mergeFiles) {
-          updateTabs();
-        }
-      });
-
+      // TODO dod we have to tell angular about this content change?
       $('#mergely-editor').mergely({
         cmsettings: { readOnly: false, lineNumbers: true },
       });
