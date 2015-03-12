@@ -16,6 +16,6 @@
   "private": true,
   "dependencies": {
     "mergely": "git@github.com:weebygames/bower-mergely#master",
-    "angular-bootstrap": "~0.12.1"
+    "angular-bootstrap": "<=0.12.1"
   }
 }
