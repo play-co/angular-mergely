@@ -17,6 +17,8 @@ The following attributes can be set on the `mergelyEditor` directive:
     A file name to data map of files in the original project.
   * `mergeFiles`
     A file name to data map of files in the new project.
-  * `complete({filename: data, ...})`
+  * `accept({filename: data, ...})`
     A function to be called upon the completion of the merge with the amended data.
+  * `cancel()`
+    A function to be called upon the cancelation of the merge.
 
