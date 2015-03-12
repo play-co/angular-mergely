@@ -1,9 +1,12 @@
-.mergely-column
-  .CodeMirror
-    height 100%
-  textarea
-    height 100%
+.mergely-column .CodeMirror {
+  height: 100%;
+}
 
-.merge-bar
-  display flex
-  flex-direction row
+.mergely-column textarea {
+  height: 100%;
+}
+
+.merge-bar {
+  display: flex;
+  flex-direction: row;
+}
