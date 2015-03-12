@@ -10,14 +10,24 @@ app.directive('mergelyEditor', function() {
           '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
         '</tabset>' +
         '<div id="mergely-editor"></div>' +
+        '<button type="button" class="btn btn-default" ng-click="_accept()" is-disabled="mergable">Merge</button>' +
+        '<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>' +
       '</div>',
     scope: {
       files: '=',
       mergeFiles: '=',
-      complete: '='
+      accept: '=',
+      cancel: '='
     },
     controller: function($scope) {
       $scope.tabs = [];
+      $scope.finalFiles = [];
+      $scope.mergable = false;
+
+      // Wrapper to accept to get the file contents before hand
+      $scope._accept = function() {
+        $scope.accept($scope.finalFiles);
+      };
     },
     link: function($scope, element) {
       var file = undefined;
