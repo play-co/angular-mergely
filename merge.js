@@ -21,6 +21,8 @@ app.directive('mergelyEditor', function() {
     },
     link: function($scope, element) {
       var file = undefined;
+      var curTab = undefined;
+      var tabData = {};
 
       var merge = function(as, bs) {
         var cs = [];
@@ -30,8 +32,31 @@ app.directive('mergelyEditor', function() {
       }
 
       var openTab = function(file) {
-        $('#mergely-editor').mergely('lhs', $scope.files[file] || '');
-        $('#mergely-editor').mergely('rhs', $scope.mergeFiles[file] || '');
+        // Save previous tab
+        if (curTab) {
+          tabData[curTab] = {
+            lhs: $('#mergely-editor').mergely('get', 'lhs'),
+            rhs: $('#mergely-editor').mergely('get', 'rhs')
+          };
+        }
+        curTab = file;
+
+        // Load tab content
+        var lcontent;
+        var rcontent;
+
+        console.log('keys:', Object.keys(tabData));
+        if (file in tabData) {
+          lcontent = tabData.lhs;
+          rcontent = tabData.rhs;
+        } else {
+          lcontent = $scope.files[file] || '';
+          rcontent = $scope.mergeFiles[file] || '';
+        }
+
+        // TODO Do we have to tell angular about this content change?
+        $('#mergely-editor').mergely('lhs', lcontent);
+        $('#mergely-editor').mergely('rhs', rcontent);
       };
 
       var updateTabs = function() {
