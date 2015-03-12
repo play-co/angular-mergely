@@ -4,17 +4,22 @@ app.directive('mergelyEditor', function() {
   return {
     restrict: 'E',
     replace: true,
+
+    // TODO seperate this out into a seperate html template file
     template:
       '<div class="mergely-wrapper">' +
         '<div class="merge-bar">' +
           '<tabset>' +
             '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
           '</tabset>' +
-          '<button type="button" class="merge-btn btn btn-default" ng-click="_accept()" ng-disabled="!mergable()">Merge</button>' +
-          '<button type="button" class="merge-btn btn btn-default" ng-click="cancel()">Cancel</button>' +
+          '<div class="merge-btn-container">' +
+            '<button type="button" class="merge-btn btn btn-success" ng-click="_accept()" ng-disabled="!mergable()">Merge</button>' +
+            '<button type="button" class="merge-btn btn btn-warning" ng-click="cancel()">Cancel</button>' +
+          '</div>' +
         '</div>' +
         '<div id="mergely-editor"></div>' +
       '</div>',
+
     scope: {
       files: '=',
       mergeFiles: '=',

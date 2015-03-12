@@ -9,4 +9,14 @@
 .merge-bar {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.merge-bar <* {
+  flex-grow: 1;
+}
+
+.merge-bar <.merge-btn {
+  flex-grow: 0;
+  flex-shrink: 0;
 }
