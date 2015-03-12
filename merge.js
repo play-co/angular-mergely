@@ -10,7 +10,7 @@ app.directive('mergelyEditor', function() {
           '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
         '</tabset>' +
         '<div id="mergely-editor"></div>' +
-        '<button type="button" class="btn btn-default" ng-click="_accept()" is-disabled="mergable">Merge</button>' +
+        '<button type="button" class="btn btn-default" ng-click="_accept()" ng-disabled="!mergable()">Merge</button>' +
         '<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>' +
       '</div>',
     scope: {
@@ -23,78 +23,113 @@ app.directive('mergelyEditor', function() {
       $scope.tabs = [];
       $scope.finalFiles = [];
       $scope.mergable = false;
+      $scope.tabData = {};
+      $scope.curTab = undefined;
+
+      // Get the union of the two path sets
+      $scope.getAllPaths = function() {
+        var as = Object.keys($scope.files);
+        var bs = Object.keys($scope.mergeFiles);
+        var paths = [];
+
+        for (var a in as) paths[a] = as[a];
+        for (var b in bs) paths[b] = bs[b];
+
+        return paths;
+      }
+
+      // determines if things are mergable now, if so, return files
+      $scope.mergable = function() {
+        var files = {};
+        var paths = $scope.getAllPaths();
+        console.log(Object.keys($scope.tabData));
+
+        for (var i = 0; i < paths.length; i++) {
+          var lhs, rhs, path = paths[i];
+
+          if (path === $scope.curTab) {
+            lhs = $('#mergely-editor').mergely('get', 'lhs'),
+            rhs = $('#mergely-editor').mergely('get', 'rhs')
+          } else {
+            if (path in $scope.tabData) {
+              lhs = $scope.tabData[path].lhs;
+              rhs = $scope.tabData[path].rhs;
+            } else {
+              console.log('tab', path, 'not save');
+              return false;
+            }
+          }
+
+          if (lhs !== rhs) {
+            console.log('tab', path, 'not same');
+            console.log(lhs.length, rhs.length);
+            return false;
+          } else {
+            files[path] = lhs;
+          }
+        }
+
+        return 'mergable';
+        return files;
+      }
 
       // Wrapper to accept to get the file contents before hand
       $scope._accept = function() {
-        $scope.accept($scope.finalFiles);
+        $scope.accept($scope.mergable());
       };
     },
     link: function($scope, element) {
-      var file = undefined;
-      var curTab = undefined;
-      var tabData = {};
-
-      var merge = function(as, bs) {
-        var cs = [];
-        for (var a in as) cs[a] = as[a];
-        for (var b in bs) cs[b] = bs[b];
-        return cs;
-      }
-
       var openTab = function(file) {
         // Save previous tab
-        if (curTab) {
-          tabData[curTab] = {
+        if ($scope.curTab) {
+          $scope.tabData[$scope.curTab] = {
             lhs: $('#mergely-editor').mergely('get', 'lhs'),
             rhs: $('#mergely-editor').mergely('get', 'rhs')
           };
         }
-        curTab = file;
+        $scope.curTab = file;
 
         // Load tab content
-        var lcontent;
-        var rcontent;
-
-        console.log('keys:', Object.keys(tabData));
-        if (file in tabData) {
-          lcontent = tabData.lhs;
-          rcontent = tabData.rhs;
-        } else {
-          lcontent = $scope.files[file] || '';
-          rcontent = $scope.mergeFiles[file] || '';
-        }
-
         // TODO Do we have to tell angular about this content change?
-        $('#mergely-editor').mergely('lhs', lcontent);
-        $('#mergely-editor').mergely('rhs', rcontent);
+        $('#mergely-editor').mergely('lhs', $scope.tabData[file].lhs);
+        $('#mergely-editor').mergely('rhs', $scope.tabData[file].rhs);
       };
 
-      var updateTabs = function(files) {
-        if (!files) {
+      var updateTabs = function() {
+        if (!Object.keys($scope.files).length || !Object.keys($scope.mergeFiles).length) {
+          // Do nothing if both are not set yet
           return;
         }
 
-        // make sure we have some file active
-        if (file === undefined) {
-          file = Object.keys($scope.mergeFiles)[0] || file;
-          file = Object.keys($scope.files)[0] || file;
+        // Get the active file or make an file active
+        var newCurTab = $scope.curTab;
+        if (newCurTab === undefined) {
+          newCurTab = Object.keys($scope.files)[0] ||
+                      Object.keys($scope.mergeFiles)[0];
         }
 
         // update the tabs
         $scope.tabs = [];
-        var paths = merge(Object.keys($scope.files), Object.keys($scope.mergeFiles));
+        $scope.tabData = {};
 
+        var paths = $scope.getAllPaths();
         for (var i = 0; i < paths.length; i++) {
           var path = paths[i];
+
+          $scope.tabData[path] = {
+            lhs: $scope.files[path] || '',
+            rhs: $scope.mergeFiles[path] || ''
+          };
+
           $scope.tabs.push({
             heading: path,
-            active: path === file,
+            active: path === newCurTab,
             click: openTab
           });
         }
 
         // make sure to goto the tab
-        openTab(file);
+        openTab(newCurTab);
       };
 
       // update tabs when files/mergeFiles change
