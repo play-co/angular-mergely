@@ -14,7 +14,7 @@ app.directive('mergelyEditor', function() {
           '</tabset>' +
           '<div class="merge-btn-container">' +
             '<button type="button" class="merge-btn btn btn-success" ng-click="_accept()" ng-disabled="!mergable()">Merge</button>' +
-            '<button type="button" class="merge-btn btn btn-warning" ng-click="cancel()">Cancel</button>' +
+            '<button type="button" class="merge-btn btn btn-warning" ng-click="mergeCancel()">Cancel</button>' +
           '</div>' +
         '</div>' +
         '<div id="mergely-editor"></div>' +
@@ -49,7 +49,6 @@ app.directive('mergelyEditor', function() {
       $scope.mergable = function() {
         var files = {};
         var paths = $scope.getAllPaths();
-        console.log(Object.keys($scope.tabData));
 
         for (var i = 0; i < paths.length; i++) {
           var lhs, rhs, path = paths[i];
@@ -76,13 +75,12 @@ app.directive('mergelyEditor', function() {
           }
         }
 
-        return 'mergable';
         return files;
       }
 
       // Wrapper to accept to get the file contents before hand
       $scope._accept = function() {
-        $scope.accept($scope.mergable());
+        $scope.mergeAccept($scope.mergable());
       };
     },
     link: function($scope, element) {
