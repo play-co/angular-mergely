@@ -61,14 +61,11 @@ app.directive('mergelyEditor', function() {
               lhs = $scope.tabData[path].lhs;
               rhs = $scope.tabData[path].rhs;
             } else {
-              console.log('tab', path, 'not save');
               return false;
             }
           }
 
           if (lhs !== rhs) {
-            console.log('tab', path, 'not same');
-            console.log(lhs.length, rhs.length);
             return false;
           } else {
             files[path] = lhs;
