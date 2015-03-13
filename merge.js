@@ -138,8 +138,8 @@ app.directive('mergelyEditor', function() {
       };
 
       // update tabs when files/mergeFiles change
-      $scope.$watch('files', updateTabs);
       $scope.$watch('mergeFiles', updateTabs);
+      $scope.$watch('mergeWithFiles', updateTabs);
 
       // TODO dod we have to tell angular about this content change?
       $('#mergely-editor').mergely({
