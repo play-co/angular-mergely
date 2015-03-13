@@ -21,10 +21,10 @@ app.directive('mergelyEditor', function() {
       '</div>',
 
     scope: {
-      files: '=',
       mergeFiles: '=',
-      accept: '=',
-      cancel: '='
+      mergeWithFiles: '=',
+      mergeAccept: '=',
+      mergeCancel: '='
     },
     controller: function($scope) {
       $scope.tabs = [];
@@ -35,8 +35,8 @@ app.directive('mergelyEditor', function() {
 
       // Get the union of the two path sets
       $scope.getAllPaths = function() {
-        var as = Object.keys($scope.files);
-        var bs = Object.keys($scope.mergeFiles);
+        var as = Object.keys($scope.mergeFiles);
+        var bs = Object.keys($scope.mergeWithFiles);
         var paths = [];
 
         for (var a in as) paths[a] = as[a];
@@ -103,7 +103,7 @@ app.directive('mergelyEditor', function() {
       };
 
       var updateTabs = function() {
-        if (!Object.keys($scope.files).length || !Object.keys($scope.mergeFiles).length) {
+        if (!Object.keys($scope.mergeFiles).length || !Object.keys($scope.mergeWithFiles).length) {
           // Do nothing if both are not set yet
           return;
         }
@@ -111,8 +111,8 @@ app.directive('mergelyEditor', function() {
         // Get the active file or make an file active
         var newCurTab = $scope.curTab;
         if (newCurTab === undefined) {
-          newCurTab = Object.keys($scope.files)[0] ||
-                      Object.keys($scope.mergeFiles)[0];
+          newCurTab = Object.keys($scope.mergeFiles)[0] ||
+                      Object.keys($scope.mergeWithFiles)[0];
         }
 
         // update the tabs
@@ -124,8 +124,8 @@ app.directive('mergelyEditor', function() {
           var path = paths[i];
 
           $scope.tabData[path] = {
-            lhs: $scope.files[path] || '',
-            rhs: $scope.mergeFiles[path] || ''
+            lhs: $scope.mergeFiles[path] || '',
+            rhs: $scope.mergeWithFiles[path] || ''
           };
 
           $scope.tabs.push({
