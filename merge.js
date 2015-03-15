@@ -13,8 +13,8 @@ app.directive('mergelyEditor', function() {
             '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
           '</tabset>' +
           '<div class="merge-btn-container">' +
-            '<button type="button" class="merge-btn btn btn-success" ng-click="_accept()">Merge</button>' +
-            '<button type="button" class="merge-btn btn btn-warning" ng-click="mergeCancel()">Cancel</button>' +
+            '<button type="button" class="merge-btn merge-btn-accept" ng-click="_accept()">Merge</button>' +
+            '<button type="button" class="merge-btn merge-btn-cancel" ng-click="mergeCancel()">Cancel</button>' +
           '</div>' +
         '</div>' +
         '<div id="mergely-editor"></div>' +

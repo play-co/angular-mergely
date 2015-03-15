@@ -33,5 +33,9 @@ mergely itself):
     The bar below the mergely editor.
   * `merge-btn`
     Applied to the "Merge" and "Cancel" button elements.
+  * `merge-btn-accept`
+    Applied to the "Merge" button.
+  * `merge-btn-cancel`
+    Applied to the "Cancel" button.
   * `merge-btn-container`
     A container encapsulating the aforementioned buttons.
