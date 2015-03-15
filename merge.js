@@ -13,7 +13,7 @@ app.directive('mergelyEditor', function() {
             '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
           '</tabset>' +
           '<div class="merge-btn-container">' +
-            '<button type="button" class="merge-btn btn btn-success" ng-click="_accept()" ng-disabled="!mergable()">Merge</button>' +
+            '<button type="button" class="merge-btn btn btn-success" ng-click="_accept()">Merge</button>' +
             '<button type="button" class="merge-btn btn btn-warning" ng-click="mergeCancel()">Cancel</button>' +
           '</div>' +
         '</div>' +
@@ -49,39 +49,31 @@ app.directive('mergelyEditor', function() {
         return paths;
       }
 
-      // determines if things are mergable now, if so, return files
-      $scope.mergable = function() {
+      // retrieves the files for the merge
+      $scope.filesToMerge = function() {
         var files = {};
         var paths = $scope.getAllPaths();
 
         for (var i = 0; i < paths.length; i++) {
-          var lhs, rhs, path = paths[i];
+          var content, path = paths[i];
 
           if (path === $scope.curTab) {
-            lhs = $('#mergely-editor').mergely('get', 'lhs'),
-            rhs = $('#mergely-editor').mergely('get', 'rhs')
+            content = $('#mergely-editor').mergely('get', 'lhs');
           } else {
-            if (path in $scope.tabData) {
-              lhs = $scope.tabData[path].lhs;
-              rhs = $scope.tabData[path].rhs;
-            } else {
-              return false;
-            }
+            content = $scope.tabData[path].lhs;
           }
 
-          if (lhs !== rhs) {
-            return false;
-          } else {
-            files[path] = lhs;
+          if (content.length) {
+            files[path] = content;
           }
         }
 
         return files;
       }
 
-      // Wrapper to accept to get the file contents before hand
+      // Wrapper to accept to get the file contents before finalizing merge
       $scope._accept = function() {
-        $scope.mergeAccept($scope.mergable());
+        $scope.mergeAccept($scope.filesToMerge());
       };
     },
     link: function($scope, element) {
