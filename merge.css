@@ -12,11 +12,16 @@
   justify-content: space-between;
 }
 
-.merge-bar <* {
+.merge-bottom-bar {
+  clear: both;
+}
+
+.merge-bar > * {
   flex-grow: 1;
 }
 
-.merge-bar <.merge-btn {
+.merge-bar .merge-btn {
+  float: right;
   flex-grow: 0;
   flex-shrink: 0;
 }

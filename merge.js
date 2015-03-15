@@ -8,7 +8,7 @@ app.directive('mergelyEditor', function() {
     // TODO seperate this out into a seperate html template file
     template:
       '<div class="mergely-wrapper">' +
-        '<div class="merge-bar">' +
+        '<div class="merge-bar merge-top-bar">' +
           '<tabset>' +
             '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
           '</tabset>' +
@@ -18,6 +18,10 @@ app.directive('mergelyEditor', function() {
           '</div>' +
         '</div>' +
         '<div id="mergely-editor"></div>' +
+        '<div class="merge-bar merge-bottom-bar">' +
+          '<label>Original File</label>' +
+          '<label>File Merging</label>' +
+        '</div>' +
       '</div>',
 
     scope: {

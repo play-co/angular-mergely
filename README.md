@@ -26,7 +26,11 @@ The following css classes are of importance (in addition to those provided by
 mergely itself):
 
   * `merge-bar`
+    The bars above and below the mergely editor.
+  * `merge-top-bar`
     The bar above the mergely editor.
+  * `merge-bottom-bar`
+    The bar below the mergely editor.
   * `merge-btn`
     Applied to the "Merge" and "Cancel" button elements.
   * `merge-btn-container`
