@@ -99,18 +99,13 @@ app.directive('mergelyEditor', function() {
           return;
         }
 
-        // Get the active file or make an file active
-        var newCurTab = $scope.curTab;
-        if (newCurTab === undefined) {
-          newCurTab = Object.keys($scope.mergeFiles)[0] ||
-                      Object.keys($scope.mergeWithFiles)[0];
-        }
-
         // update the tabs
         $scope.tabs = [];
         $scope.tabData = {};
 
         var paths = $scope.getAllPaths();
+        var newCurTab = null;
+
         for (var i = 0; i < paths.length; i++) {
           var path = paths[i];
 
@@ -119,11 +114,21 @@ app.directive('mergelyEditor', function() {
             rhs: $scope.mergeWithFiles[path] || ''
           };
 
-          $scope.tabs.push({
-            heading: path,
-            active: path === newCurTab,
-            click: openTab
-          });
+          // Only add tabs if the sides are different or given it is the last
+          // tab and we have yet to add any (to at least show the use something)
+          if ($scope.tabData[path].lhs !== $scope.tabData[path].rhs
+              || (i === paths.length - 1 && !$scope.tabs.length))
+          {
+            if (!newCurTab) {
+              newCurTab = path;
+            }
+
+            $scope.tabs.push({
+              heading: path,
+              active: path === newCurTab,
+              click: openTab
+            });
+          }
         }
 
         // make sure to goto the tab
