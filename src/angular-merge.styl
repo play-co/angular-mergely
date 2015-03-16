@@ -1,0 +1,29 @@
+
+.mergely-wrapper
+  /* Fixes setting the height on the mergely-column class */
+  .mergely-column .CodeMirror
+    height 100%
+
+  .mergely-column textarea
+    height 100%
+
+  /* Some sensible layout defaults */
+  .merge-bar
+    display flex
+    flex-direction row
+    justify-content space-between
+
+  .merge-bottom-bar
+    clear both
+
+  .merge-btn-container
+    display flex
+    flex-direction row-reverse
+    align-items center
+
+  .merge-bar > *
+    flex-grow 1
+
+  .merge-bar .merge-btn
+    flex-grow 0
+    flex-shrink 0

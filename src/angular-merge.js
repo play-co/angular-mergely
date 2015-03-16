@@ -43,11 +43,15 @@ app.directive('mergelyEditor', function() {
         var bs = Object.keys($scope.mergeWithFiles);
         var paths = [];
 
-        for (var a in as) paths[a] = as[a];
-        for (var b in bs) paths[b] = bs[b];
+        for (var a in as) {
+          paths[a] = as[a];
+        }
+        for (var b in bs) {
+          paths[b] = bs[b];
+        }
 
         return paths;
-      }
+      };
 
       // retrieves the files for the merge
       $scope.filesToMerge = function() {
@@ -69,7 +73,7 @@ app.directive('mergelyEditor', function() {
         }
 
         return files;
-      }
+      };
 
       // Wrapper to accept to get the file contents before finalizing merge
       $scope._accept = function() {
@@ -94,7 +98,8 @@ app.directive('mergelyEditor', function() {
       };
 
       var updateTabs = function() {
-        if (!Object.keys($scope.mergeFiles).length || !Object.keys($scope.mergeWithFiles).length) {
+        if (!Object.keys($scope.mergeFiles).length ||
+          !Object.keys($scope.mergeWithFiles).length) {
           // Do nothing if both are not set yet
           return;
         }
@@ -116,9 +121,8 @@ app.directive('mergelyEditor', function() {
 
           // Only add tabs if the sides are different or given it is the last
           // tab and we have yet to add any (to at least show the use something)
-          if ($scope.tabData[path].lhs !== $scope.tabData[path].rhs
-              || (i === paths.length - 1 && !$scope.tabs.length))
-          {
+          if ($scope.tabData[path].lhs !== $scope.tabData[path].rhs ||
+            (i === paths.length - 1 && !$scope.tabs.length)) {
             if (!newCurTab) {
               newCurTab = path;
             }
@@ -142,7 +146,10 @@ app.directive('mergelyEditor', function() {
       // TODO dod we have to tell angular about this content change?
       $('#mergely-editor').mergely({
         cmsettings: { readOnly: false, lineNumbers: true },
+        viewport: true,
+        editor_width: '46%',
+        editor_height: '100%'
       });
     }
-  }
+  };
 });
