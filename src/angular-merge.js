@@ -12,15 +12,15 @@ app.directive('mergelyEditor', function() {
           '<tabset>' +
             '<tab ng-repeat="tab in tabs" heading="{{tab.heading}}" active="tab.active" disable="!tab.active" ng-click="tab.click(tab.heading)"></tab>' +
           '</tabset>' +
-          '<div class="merge-btn-container">' +
-            '<button type="button" class="merge-btn merge-btn-accept" ng-click="_accept()">Merge</button>' +
-            '<button type="button" class="merge-btn merge-btn-cancel" ng-click="mergeCancel()">Cancel</button>' +
-          '</div>' +
         '</div>' +
         '<div id="mergely-editor"></div>' +
         '<div class="merge-bar merge-bottom-bar">' +
           '<label>Original File</label>' +
           '<label>File Merging</label>' +
+        '</div>' +
+        '<div class="merge-btn-container">' +
+          '<button type="button" class="merge-btn" ng-class="acceptButtonClass" ng-click="_accept()">Merge</button>' +
+          '<button type="button" class="merge-btn" ng-class="cancelButtonClass" ng-click="mergeCancel()">Cancel</button>' +
         '</div>' +
       '</div>',
 
@@ -28,7 +28,10 @@ app.directive('mergelyEditor', function() {
       mergeFiles: '=',
       mergeWithFiles: '=',
       mergeAccept: '=',
-      mergeCancel: '='
+      mergeCancel: '=',
+
+      cancelButtonClass: '@?',
+      acceptButtonClass: '@?'
     },
     controller: function($scope) {
       $scope.tabs = [];
@@ -147,7 +150,7 @@ app.directive('mergelyEditor', function() {
       $('#mergely-editor').mergely({
         cmsettings: { readOnly: false, lineNumbers: true },
         viewport: true,
-        editor_width: '46%',
+        editor_width: '45%',
         editor_height: '100%'
       });
     }
