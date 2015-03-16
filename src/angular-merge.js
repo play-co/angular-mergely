@@ -20,15 +20,15 @@ app.directive('mergelyEditor', function() {
         '</div>' +
         '<div class="merge-btn-container">' +
           '<button type="button" class="merge-btn" ng-class="acceptButtonClass" ng-click="_accept()">Merge</button>' +
-          '<button type="button" class="merge-btn" ng-class="cancelButtonClass" ng-click="mergeCancel()">Cancel</button>' +
+          '<button type="button" class="merge-btn" ng-class="cancelButtonClass" ng-click="cancelCallback()">Cancel</button>' +
         '</div>' +
       '</div>',
 
     scope: {
-      mergeFiles: '=',
-      mergeWithFiles: '=',
-      mergeAccept: '=',
-      mergeCancel: '=',
+      originalFiles: '=',
+      otherFiles: '=',
+      acceptCallback: '=',
+      cancelCallback: '=',
 
       cancelButtonClass: '@?',
       acceptButtonClass: '@?'
@@ -42,8 +42,8 @@ app.directive('mergelyEditor', function() {
 
       // Get the union of the two path sets
       $scope.getAllPaths = function() {
-        var as = Object.keys($scope.mergeFiles);
-        var bs = Object.keys($scope.mergeWithFiles);
+        var as = Object.keys($scope.originalFiles);
+        var bs = Object.keys($scope.otherFiles);
         var paths = [];
 
         for (var a in as) {
@@ -80,7 +80,7 @@ app.directive('mergelyEditor', function() {
 
       // Wrapper to accept to get the file contents before finalizing merge
       $scope._accept = function() {
-        $scope.mergeAccept($scope.filesToMerge());
+        $scope.acceptCallback($scope.filesToMerge());
       };
     },
     link: function($scope, element) {
@@ -101,8 +101,8 @@ app.directive('mergelyEditor', function() {
       };
 
       var updateTabs = function() {
-        if (!Object.keys($scope.mergeFiles).length ||
-          !Object.keys($scope.mergeWithFiles).length) {
+        if (!Object.keys($scope.originalFiles).length ||
+          !Object.keys($scope.otherFiles).length) {
           // Do nothing if both are not set yet
           return;
         }
@@ -118,8 +118,8 @@ app.directive('mergelyEditor', function() {
           var path = paths[i];
 
           $scope.tabData[path] = {
-            lhs: $scope.mergeFiles[path] || '',
-            rhs: $scope.mergeWithFiles[path] || ''
+            lhs: $scope.originalFiles[path] || '',
+            rhs: $scope.otherFiles[path] || ''
           };
 
           // Only add tabs if the sides are different or given it is the last
@@ -142,9 +142,9 @@ app.directive('mergelyEditor', function() {
         openTab(newCurTab);
       };
 
-      // update tabs when files/mergeFiles change
-      $scope.$watch('mergeFiles', updateTabs);
-      $scope.$watch('mergeWithFiles', updateTabs);
+      // update tabs when files/originalFiles change
+      $scope.$watch('originalFiles', updateTabs);
+      $scope.$watch('otherFiles', updateTabs);
 
       // TODO dod we have to tell angular about this content change?
       $('#mergely-editor').mergely({
