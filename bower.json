@@ -5,7 +5,16 @@
     "Chris Harding <chris@weeby.co>"
   ],
   "description": "An angular wrapper for mergely",
-  "main": [ "merge.js", "merge.css" ],
+  "main": [
+    "merge.js",
+    "merge.css"
+  ],
+  "ignore": [
+    "README.md",
+    "gulpfile.js",
+    "package.json",
+    "src"
+  ],
   "keywords": [
     "angular",
     "mergely",
