@@ -1,9 +1,9 @@
 {
   "name": "angular-mergely",
-  "version": "0.0.1",
-  "private": false,
+  "version": "0.1.0",
+  "private": true,
   "scripts": {},
-  "dependencies": {
+  "devDependencies": {
     "gulp": "=3.8.11",
     "gulp-stylus": "=1.3.4",
     "nib": "=1.0.4"
