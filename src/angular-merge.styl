@@ -1,11 +1,24 @@
 
 .mergely-wrapper
+  display flex
+  flex-direction column
+  min-width 450px
+
+  #mergely-editor
+    flex 1
+    display flex
+    position relative
+
+    #mergely-editor-editor-lhs
+    #mergely-editor-editor-rhs
+      flex 1
   /* Fixes setting the height on the mergely-column class */
   .mergely-column
-    .CodeMirror
-      height 100%
+    position relative
 
-    textarea
+    .CodeMirror
+      position absolute
+      width 100%
       height 100%
 
   /* Some sensible layout defaults */
