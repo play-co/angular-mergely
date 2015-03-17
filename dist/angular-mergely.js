@@ -15,8 +15,8 @@ app.directive('mergelyEditor', function() {
         '</div>' +
         '<div id="mergely-editor"></div>' +
         '<div class="merge-bar merge-bottom-bar">' +
-          '<label>Original File</label>' +
-          '<label>File Merging</label>' +
+          '<label>My File (will keep)</label>' +
+          '<label>Other File</label>' +
         '</div>' +
         '<div class="merge-btn-container">' +
           '<button type="button" class="merge-btn" ng-class="acceptButtonClass" ng-click="_accept()">Merge</button>' +
@@ -150,8 +150,8 @@ app.directive('mergelyEditor', function() {
       $('#mergely-editor').mergely({
         cmsettings: { readOnly: false, lineNumbers: true },
         viewport: true,
-        editor_width: '45%',
-        editor_height: '100%'
+        editor_width: 'auto',
+        editor_height: 'auto'
       });
     }
   };
