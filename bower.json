@@ -6,8 +6,8 @@
   ],
   "description": "An angular wrapper for mergely",
   "main": [
-    "dist/angular-merge.js",
-    "dist/angular-merge.css"
+    "dist/angular-mergely.js",
+    "dist/angular-mergely.css"
   ],
   "ignore": [
     "README.md",
