@@ -24,7 +24,7 @@
   "license": "MPL",
   "private": true,
   "dependencies": {
-    "mergely": "git@github.com:weebygames/Mergely#bower",
+    "mergely": "git@github.com:weebygames/Mergely#inosculation",
     "angular-bootstrap": "<=0.12.1"
   }
 }
