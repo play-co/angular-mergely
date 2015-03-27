@@ -33,7 +33,7 @@ app.directive('mergelyEditor', function() {
       cancelButtonClass: '@?',
       acceptButtonClass: '@?'
     },
-    controller: function($scope) {
+    controller: ["$scope", function($scope) {
       $scope.tabs = [];
       $scope.finalFiles = [];
       $scope.mergable = false;
@@ -82,7 +82,7 @@ app.directive('mergelyEditor', function() {
       $scope._accept = function() {
         $scope.acceptCallback($scope.filesToMerge());
       };
-    },
+    }],
     link: function($scope, element) {
       var openTab = function(file) {
         // Save previous tab
