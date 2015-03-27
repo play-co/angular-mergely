@@ -18,8 +18,8 @@ gulp.task('js', [], function() {
     .pipe(gulp.dest(paths.js.dist));
 });
 
-gulp.task('dist', ['js', 'stylus'], function() {
-});
+gulp.task('dist', ['js', 'stylus']);
+gulp.task('default', ['dist']);
 
 gulp.task('watch', ['dist'], function() {
   gulp.watch(paths.js.src, ['js']);
