@@ -29,7 +29,7 @@ app.directive('mergelyEditor', function() {
       otherFiles: '=',
       acceptCallback: '=',
       cancelCallback: '=',
-
+      settings: '=',
       cancelButtonClass: '@?',
       acceptButtonClass: '@?'
     },
@@ -39,6 +39,7 @@ app.directive('mergelyEditor', function() {
       $scope.mergable = false;
       $scope.tabData = {};
       $scope.curTab = undefined;
+      $scope.ignoreChanges = false;
 
       // Get the union of the two path sets
       $scope.getAllPaths = function() {
@@ -84,20 +85,35 @@ app.directive('mergelyEditor', function() {
       };
     }],
     link: function($scope, element) {
-      var openTab = function(file) {
-        // Save previous tab
-        if ($scope.curTab) {
-          $scope.tabData[$scope.curTab] = {
-            lhs: $('#mergely-editor').mergely('get', 'lhs'),
-            rhs: $('#mergely-editor').mergely('get', 'rhs')
-          };
+      var getHeading = function(path) {
+        if ($scope.tabData[path].lhs !== $scope.tabData[path].rhs) {
+          return path + '*';
         }
+        return path;
+      };
+
+      var openTab = function(file) {
         $scope.curTab = file;
 
         // Load tab content
-        // TODO Do we have to tell angular about this content change?
+        $scope.ignoreChanges = true;
         $('#mergely-editor').mergely('lhs', $scope.tabData[file].lhs);
         $('#mergely-editor').mergely('rhs', $scope.tabData[file].rhs);
+        $scope.ignoreChanges = false;
+      };
+
+      var onContentChange = function() {
+        if ($scope.curTab && !$scope.ignoreChanges) {
+          var td = $scope.tabData[$scope.curTab];
+          td.lhs = $('#mergely-editor').mergely('get', 'lhs');
+          td.rhs = $('#mergely-editor').mergely('get', 'rhs');
+
+          // Update the tab heading
+          var index = $scope.tabData[$scope.curTab].index;
+          $scope.$apply(function() {
+            $scope.tabs[index].heading = getHeading($scope.curTab);
+          });
+        }
       };
 
       var updateTabs = function() {
@@ -119,7 +135,8 @@ app.directive('mergelyEditor', function() {
 
           $scope.tabData[path] = {
             lhs: $scope.originalFiles[path] || '',
-            rhs: $scope.otherFiles[path] || ''
+            rhs: $scope.otherFiles[path] || '',
+            index: -1
           };
 
           // Only add tabs if the sides are different or given it is the last
@@ -131,10 +148,12 @@ app.directive('mergelyEditor', function() {
             }
 
             $scope.tabs.push({
-              heading: path,
+              heading: getHeading(path),
               active: path === newCurTab,
               click: openTab
             });
+
+            $scope.tabData[path].index = $scope.tabs.length - 1;
           }
         }
 
@@ -146,13 +165,21 @@ app.directive('mergelyEditor', function() {
       $scope.$watch('originalFiles', updateTabs);
       $scope.$watch('otherFiles', updateTabs);
 
-      // TODO dod we have to tell angular about this content change?
-      $('#mergely-editor').mergely({
-        cmsettings: { readOnly: false, lineNumbers: true },
-        viewport: true,
-        editor_width: 'auto',
-        editor_height: 'auto'
-      });
+      // Default mergely settings
+      $scope.settings = $scope.settings || {};
+      $scope.settings.viewport = $scope.settings.viewport || true;
+      $scope.settings.editor_width  = $scope.settings.editor_width  || 'auto';
+      $scope.settings.editor_height = $scope.settings.editor_height || 'auto';
+
+      // enable mergely
+      $('#mergely-editor').mergely($scope.settings);
+
+      // register code mirror callbacks
+      var lcm = $('#mergely-editor').mergely('cm', 'lhs');
+      var rcm = $('#mergely-editor').mergely('cm', 'rhs');
+
+      lcm.on('changes', onContentChange);
+      rcm.on('changes', onContentChange);
     }
   };
 });
