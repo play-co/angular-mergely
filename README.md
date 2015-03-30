@@ -25,6 +25,8 @@ The following attributes can be set on the `mergelyEditor` directive:
     A set of classes to be added to the accept button.
   * `cancelButtonClass`
     A set of classes to be added to the cancel button.
+  * `settings`
+    Settings to pass to mergely, see the mergely documentation for details.
 
 The following css classes are of importance (in addition to those provided by
 mergely itself):
