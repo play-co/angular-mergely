@@ -29,7 +29,7 @@ app.directive('mergelyEditor', function() {
       otherFiles: '=',
       acceptCallback: '=',
       cancelCallback: '=',
-
+      settings: '=',
       cancelButtonClass: '@?',
       acceptButtonClass: '@?'
     },
@@ -165,13 +165,15 @@ app.directive('mergelyEditor', function() {
       $scope.$watch('originalFiles', updateTabs);
       $scope.$watch('otherFiles', updateTabs);
 
+      // Default mergely settings
+      console.log('setings', $scope.settings);
+      $scope.settings = $scope.settings || {};
+      $scope.settings.viewport = $scope.settings.viewport || true;
+      $scope.settings.editor_width  = $scope.settings.editor_width  || 'auto';
+      $scope.settings.editor_height = $scope.settings.editor_height || 'auto';
+
       // enable mergely
-      $('#mergely-editor').mergely({
-        cmsettings: { readOnly: false, lineNumbers: true },
-        viewport: true,
-        editor_width: 'auto',
-        editor_height: 'auto'
-      });
+      $('#mergely-editor').mergely($scope.settings);
 
       // register code mirror callbacks
       var lcm = $('#mergely-editor').mergely('cm', 'lhs');
