@@ -166,7 +166,6 @@ app.directive('mergelyEditor', function() {
       $scope.$watch('otherFiles', updateTabs);
 
       // Default mergely settings
-      console.log('setings', $scope.settings);
       $scope.settings = $scope.settings || {};
       $scope.settings.viewport = $scope.settings.viewport || true;
       $scope.settings.editor_width  = $scope.settings.editor_width  || 'auto';
