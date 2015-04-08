@@ -87,7 +87,7 @@ app.directive('mergelyEditor', function() {
     link: function($scope, element) {
       var getHeading = function(path) {
         if ($scope.tabData[path].lhs !== $scope.tabData[path].rhs) {
-          return path + '*';
+          return path + ' (unmerged)';
         }
         return path;
       };
